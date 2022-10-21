@@ -5,7 +5,7 @@ using std::ostream;
 using std::string;
 #include <vector>
 using std::vector;
-#include <math.h> 
+#include <math.h>
 
 
 #include "Campeao.h"
@@ -55,7 +55,6 @@ Campeao::Campeao(const string &nome, const string &funcao, vector<string> nomeHa
     setNomeCampeao(nome);
     setFuncao(funcao);
     this->nomeHabilidades = nomeHabilidades;
-
     this-> ultimatePtr = 0;
     this->ultimateSize = 0;
     this->nextEntrieUltimate = 0;
@@ -158,4 +157,8 @@ int * Campeao::getCargasUltimate( ) const{
 
 int Campeao::getUltimateSize( ) const{
     return ultimateSize;
+}
+
+void Campeao::mudarCargasUltimate( int quantidade ){
+    allocUltimate( quantidade );
 }

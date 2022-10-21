@@ -45,7 +45,7 @@ bool Jogador::operator!=(const Jogador &other) const{
 
 Jogador::Jogador( const string &apelido, int partidasJogadas, int honra, const string &elo ){
     setApelido(apelido);
-    setNivel();
+    setNivel(partidasJogadas);
     setPartidasJogadas(partidasJogadas);
     this->honra = honra;
     setElo(elo);
@@ -79,8 +79,8 @@ void Jogador::setPartidasJogadas( int quantidade ){
     this->partidasJogadas = quantidade;
 }
 
-void Jogador::setNivel( ){
-    this->nivel = this->partidasJogadas + 1 / 2;
+void Jogador::setNivel( int partidasJogadas ){
+    this->nivel = partidasJogadas + 5;
 }
 
 void Jogador::setElo( const string &elo ){

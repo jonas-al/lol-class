@@ -28,6 +28,7 @@ class Campeao{
         void setNomeCampeao( const string & );
         void setFuncao( const string & );
         void printHabilidades() const;
+        void mudarCargasUltimate( int );
 
         string getNomeCampeao() const;
         string getFuncao() const;

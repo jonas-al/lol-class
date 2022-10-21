@@ -25,7 +25,7 @@ class Jogador{
 
         void setApelido( const string & );
         void setPartidasJogadas( int );
-        void setNivel( );
+        void setNivel( int );
         void setElo( const string & );
 
         string getApelido() const;

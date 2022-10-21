@@ -38,9 +38,14 @@ class Partida{
         void setJogadores( );
         void setCampeaos( );
         void setPlacar ( AMAG, bool );
+        void addPlayer( const string & );
+        void addChampion( const string & );
+        void addElo( const string & );
         void getPlacar( ) const;
         void getJogadores ( ) const;
         void getCampeaos( ) const;
+        void addCargaUltimate ( int );
+        
 
     private:
         int idPartida;
@@ -50,6 +55,11 @@ class Partida{
         Data dataPartida;
         vector<Jogador *> jogadores;
         vector<Campeao *> campeaos;
+
+        static const int MAXJOGADORES = 2;
+        static vector<string> players;
+        static vector<vector<string>> champions;
+        static vector<string> elos;
 };
 
 

@@ -10,12 +10,29 @@ using std::vector;
 using std::map;
 #include <cstdlib>
 #include <time.h>
+#include <chrono>
+#include <thread>
 
 #include "Partida.h"
 
-vector<string> players = {"Clarice", "Vinicius", "Taylor Swift", "João", "Caio", "Sarah", "Resque", "Felipe", "Yonas", "Camilo", "Alfredo", "Jorge"};
-
-vector<string> champions = {"Lux", "Braum", "Caitlyn", "Orianna", "Jinx", "Ashe", "Kai'Sa", "Tristana", "Syndra", "Miss Fortune", "Twitch", "Viktor", "Jhin"};
+//Instanciação dos vetores statics
+vector<string> Partida::players = {"Clarice", "Vinicius", "Taylor Swift", "João", "Caio", "Sarah", "Resque", "Felipe", "Yonas", "Camilo", "Alfredo", "Jorge"};
+vector<vector<string>> Partida::champions = {
+    {"Lux", "Mago", "Prisão Plasmática", "Centelha Final"},
+    {"Braum" , "Suporte/Tank", "Mordida do Inverno", "Fissura Glacial"},
+    {"Caitlyn", "Atirador", "Pacificadora de Piltover", "Ás na Manga"},
+    {"Orianna", "Mago", "Comando: Atacar", "Comando: Ressonância"},
+    {"Jinx", "Atirador","Zap!", "Super Mega Missel da Morte"},
+    {"Ashe", "Atirador", "Rajada", "Flecha de Cristal Encantada"},
+    {"Kai'Sa", "Atirador", "Exploradora do Vazio", "Instinto Assassino"},
+    {"Tristana", "Atirador","Cano Rápido", "Salto-Foguete"},
+    {"Syndra", "Mago", "Esfera Negra", "Poder Irrestrito"},
+    {"Miss Fortune", "Atirador", "Chuva de Disparos", "Metendo Bala"},
+    {"Twitch", "Atirador", "Contaminar", "Passando Fogo"},
+    {"Viktor", "Mago", "Campo Gravítico", "Tempestade de Caos"},
+    {"Jhin", "Atirador", "Florescer Mortal", "Aclamação"}
+};
+vector<string> Partida::elos = {"Ferro I", "Ferro II", "Ferro III", "Bronze I", "Bronze II", "Bronze III", "Prata I", "Prata II", "Prata III", "Ouro I", "Ouro II", "Ouro III", "Platina I", "Platina II", "Platina III", "Diamante I", "Diamante II", "Diamante III", "Mestre", "Grão-Mestre", "Challenger"};
 
 ostream &operator<<( ostream &output, const Partida &partida ){
     output << "\nId: " << partida.idPartida << '\n' 
@@ -24,11 +41,11 @@ ostream &operator<<( ostream &output, const Partida &partida ){
     << "Assistencias: " << partida.placarAzul.assistencias << '\n' 
     << "Mortes: " << partida.placarAzul.mortes << '\n' 
     << "Gold: " << partida.placarAzul.gold << '\n'
-    << "\nTime Vermelho\n" << "Abates: " << partida.placarAzul.abates << '\n' 
-    << "Assistencias: " << partida.placarAzul.assistencias << '\n' 
-    << "Mortes: " << partida.placarAzul.mortes << '\n' 
-    << "Gold: " << partida.placarAzul.gold << '\n'
-    << "Data da Partida: " << partida.dataPartida.getDia() << '/' << partida.dataPartida.getMes() << '/' << partida.dataPartida.getAno() << '\n';
+    << "\nTime Vermelho\n" << "Abates: " << partida.placarVermelho.abates << '\n' 
+    << "Assistencias: " << partida.placarVermelho.assistencias << '\n' 
+    << "Mortes: " << partida.placarVermelho.mortes << '\n' 
+    << "Gold: " << partida.placarVermelho.gold << '\n'
+    << "\nData da Partida: " << partida.dataPartida.getDia() << '/' << partida.dataPartida.getMes() << '/' << partida.dataPartida.getAno() << '\n';
 
     cout << "\nJogadores!!!";
     for( int i=0; i < int(partida.jogadores.size()); i++){
@@ -58,7 +75,7 @@ ostream &operator<<( ostream &output, const Partida &partida ){
 Partida& Partida::operator=(const Partida &other){
     if(this != &other){
         this->~Partida();
-
+        
         this->idPartida = other.idPartida;
         this->placarAzul = other.placarAzul;
         this->duracao = other.duracao;
@@ -115,7 +132,7 @@ Partida::Partida( int idPartida, AMAG placarAzul, AMAG placarVermelho, const str
     setCampeaos();
 }
 
-Partida::Partida( ):idPartida(0), duracao("0"){
+Partida::Partida( ):idPartida(0), duracao("0"), dataPartida(Data()){
     placarAzul.abates = 0;
     placarAzul.assistencias = 0;
     placarAzul.mortes = 0;
@@ -125,6 +142,9 @@ Partida::Partida( ):idPartida(0), duracao("0"){
     placarVermelho.assistencias = 0;
     placarVermelho.mortes = 0;
     placarVermelho.gold = 0;
+
+    setJogadores();
+    setCampeaos();
 }
 
 Partida::Partida( const Partida &other){
@@ -137,22 +157,37 @@ Partida::Partida( const Partida &other){
     this->campeaos = other.campeaos;
 }
 
-Partida::~Partida( ){}
+Partida::~Partida( ){
+
+    for( auto i = 0; i < int(jogadores.size( )); i++ ){
+        jogadores.pop_back();  
+    }
+
+    for( int i = 0; i < int(campeaos.size( )); i++ ){
+        campeaos.pop_back();
+    }
+
+}
 
 void Partida::setJogadores( ){
     srand(time(0));
-    for (int i = 0; i < 2; i++)
-        jogadores.push_back( new Jogador(players[rand() %int(players.size())], 1, 2, "Ouro"));
+    for (int i = 0; i < MAXJOGADORES; i++){
+        jogadores.push_back( new Jogador(players[rand() %int(players.size())], rand() %int(50), 2, elos[rand() %int(elos.size())]));
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    }
 
 }
 
 void Partida::setCampeaos( ){
     srand(time(0));
-    for (int i = 0; i < 2; i++)
-        campeaos.push_back( new Campeao(champions[rand() %int(players.size())], "Mago", {"Prisão Plasmática", "Centelha Final"}));
+    for (int i = 0; i < MAXJOGADORES; i++){
+        int indexChampion = rand() %int(players.size());
+        campeaos.push_back( new Campeao(champions[indexChampion][0], champions[indexChampion][1], {champions[indexChampion][2], champions[indexChampion][3]}));
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    }
 }
 
-void Partida::setPlacar ( AMAG placar, bool time){
+void Partida::setPlacar ( AMAG placar, bool time ){
     if(time){
         placarAzul.abates = placar.abates;
         placarAzul.assistencias = placar.assistencias;
@@ -199,5 +234,21 @@ void Partida::getCampeaos( ) const{
         for( int j = 0; j < int(campeaos[i]->getNomeHabilidades().size()); j++ ){
             cout << "\nHabilidade " << j+1 << ": " << campeaos[i]->getNomeHabilidades()[j];
         }
+    }
+}
+
+void Partida::addPlayer( const string &nomeJogador ){
+    players.push_back( nomeJogador );
+}
+void Partida::addChampion( const string &nomeCampeao ){
+    champions.push_back( {nomeCampeao} );
+} 
+void Partida::addElo( const string &nomeElo ){
+    elos.push_back( nomeElo );
+}
+
+void Partida::addCargaUltimate ( int quantidade ){
+    for(Campeao *campeao : campeaos){
+        campeao->mudarCargasUltimate(quantidade);
     }
 }
