@@ -16,7 +16,7 @@ using std::map;
 #include "Partida.h"
 
 //Instanciação dos vetores statics
-vector<string> Partida::players = {"Clarice", "Vinicius", "Taylor Swift", "João", "Caio", "Sarah", "Resque", "Felipe", "Yonas", "Camilo", "Alfredo", "Jorge"};
+vector<string> Partida::players = {"Clarice", "Vinizinho", "Taylor Swift", "João", "Caio", "Sarah", "Resque", "Felipe", "Yonas", "Camilo", "Alfredo", "Jorge","Eude","MMO"};
 vector<vector<string>> Partida::champions = {
     {"Lux", "Mago", "Prisão Plasmática", "Centelha Final"},
     {"Braum" , "Suporte/Tank", "Mordida do Inverno", "Fissura Glacial"},
@@ -74,8 +74,6 @@ ostream &operator<<( ostream &output, const Partida &partida ){
 
 Partida& Partida::operator=(const Partida &other){
     if(this != &other){
-        this->~Partida();
-        
         this->idPartida = other.idPartida;
         this->placarAzul = other.placarAzul;
         this->duracao = other.duracao;
@@ -83,6 +81,9 @@ Partida& Partida::operator=(const Partida &other){
         this->dataPartida = other.dataPartida;
         this->jogadores = other.jogadores;
         this->campeaos = other.campeaos;
+        this->players = other.players;
+        this->champions = other.champions;
+        this->elos = other.elos;
     }
     return *this;
 }
@@ -95,6 +96,10 @@ bool Partida::operator==(const Partida &other) const{
 
     for(int i=0; i < int(campeaos.size()); i++){
         if(campeaos[i] != other.campeaos[i]) return false;
+    }
+
+    for(int i=0; i < MAXJOGADORES; i++){
+        if(players[i] != other.players[i] || champions[i][0] != other.champions[i][0]) return false;;
     }
 
     if(
@@ -120,6 +125,10 @@ bool Partida::operator==(const Partida &other) const{
 
 bool Partida::operator!=(const Partida &other) const{
     return ! ( *this == other );
+}
+
+void Partida::operator!(){
+    this->duracao = "Partida Cancelada";
 }
 
 Partida::Partida( int idPartida, AMAG placarAzul, AMAG placarVermelho, const string &duracao){
@@ -155,17 +164,12 @@ Partida::Partida( const Partida &other){
     this->dataPartida = other.dataPartida;
     this->jogadores = other.jogadores;
     this->campeaos = other.campeaos;
+    this->players = other.players;
+    this->champions = other.champions;
+    this->elos = other.elos;
 }
 
 Partida::~Partida( ){
-
-    for( auto i = 0; i < int(jogadores.size( )); i++ ){
-        jogadores.pop_back();  
-    }
-
-    for( int i = 0; i < int(campeaos.size( )); i++ ){
-        campeaos.pop_back();
-    }
 
 }
 
@@ -173,7 +177,7 @@ void Partida::setJogadores( ){
     srand(time(0));
     for (int i = 0; i < MAXJOGADORES; i++){
         jogadores.push_back( new Jogador(players[rand() %int(players.size())], rand() %int(50), 2, elos[rand() %int(elos.size())]));
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        //std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
 
 }
@@ -181,9 +185,11 @@ void Partida::setJogadores( ){
 void Partida::setCampeaos( ){
     srand(time(0));
     for (int i = 0; i < MAXJOGADORES; i++){
-        int indexChampion = rand() %int(players.size());
+        cout << "Tam:" << players.size();
+        int indexChampion = rand() %int(players.size()-1);
+        cout <<"Indice:" << indexChampion;
         campeaos.push_back( new Campeao(champions[indexChampion][0], champions[indexChampion][1], {champions[indexChampion][2], champions[indexChampion][3]}));
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        //std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
 }
 

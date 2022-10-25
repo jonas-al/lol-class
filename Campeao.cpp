@@ -11,7 +11,7 @@ using std::vector;
 #include "Campeao.h"
 
 ostream &operator<<( ostream &output, const Campeao &campeao ){
-    output << campeao.nomeCampeao << '\n' << campeao.funcao;
+    output << campeao.nomeCampeao << '\n' << campeao.funcao << '\n' << campeao.habilitado;
     for(int i = 0; i < int(campeao.nomeHabilidades.size()); i++){
         output << '\n' << campeao.nomeHabilidades[i];
     }
@@ -25,14 +25,13 @@ ostream &operator<<( ostream &output, const Campeao &campeao ){
 
 Campeao& Campeao::operator=(const Campeao &other){
     if(this != &other){
-        this->~Campeao();
-
         this->nomeCampeao = other.nomeCampeao;
         this->funcao = other.funcao;
         this->nomeHabilidades = other.nomeHabilidades;
         this->ultimatePtr = other.ultimatePtr;
         this->ultimateSize = other.ultimateSize;
         this->nextEntrieUltimate = other.nextEntrieUltimate;
+        this->habilitado = other.habilitado;
     }
     return *this;
 }
@@ -42,13 +41,18 @@ bool Campeao::operator==(const Campeao &other) const{
     this->funcao != other.funcao && 
     this->ultimatePtr != other.ultimatePtr &&
     this->ultimateSize != other.ultimateSize &&
-    this->nextEntrieUltimate != other.nextEntrieUltimate) return false;
+    this->nextEntrieUltimate != other.nextEntrieUltimate &&
+    this->habilitado != other.habilitado) return false;
 
     return true;
 }
 
 bool Campeao::operator!=(const Campeao &other) const{
     return ! ( *this == other );
+}
+
+void Campeao::operator!(){
+    this->habilitado = !habilitado;
 }
 
 Campeao::Campeao(const string &nome, const string &funcao, vector<string> nomeHabilidades){
@@ -58,6 +62,7 @@ Campeao::Campeao(const string &nome, const string &funcao, vector<string> nomeHa
     this-> ultimatePtr = 0;
     this->ultimateSize = 0;
     this->nextEntrieUltimate = 0;
+    this->habilitado = true;
     allocUltimate( 5 );
 }
 
@@ -67,6 +72,7 @@ funcao("Sem função"){
     this-> ultimatePtr = 0;
     this->ultimateSize = 0;
     this->nextEntrieUltimate = 0;
+    this->habilitado = true;
 }
 
 Campeao::Campeao(const Campeao &other){
@@ -76,6 +82,7 @@ Campeao::Campeao(const Campeao &other){
     this->ultimatePtr = other.ultimatePtr;
     this->ultimateSize = other.ultimateSize;
     this->nextEntrieUltimate = other.nextEntrieUltimate;
+    this->habilitado = other.habilitado;
 }
 
 Campeao::~Campeao( ){

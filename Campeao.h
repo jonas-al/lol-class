@@ -23,6 +23,7 @@ class Campeao{
         Campeao & operator=(const Campeao &);
         bool operator==(const Campeao &) const;
         bool operator!=(const Campeao &) const;
+        void operator!();
 
         void getUltimates( ) const;
         void setNomeCampeao( const string & );
@@ -40,6 +41,7 @@ class Campeao{
         string nomeCampeao;
         string funcao;
         vector<string> nomeHabilidades;
+        bool habilitado;
 
         int *ultimatePtr;
         int ultimateSize;

@@ -17,8 +17,6 @@ ostream &operator<<( ostream &output, const Jogador &jogador ){
 
 Jogador& Jogador::operator=(const Jogador &other){
     if(this != &other){
-        this->~Jogador();
-
         this->apelido = other.apelido;
         this->partidasJogadas = other.partidasJogadas;
         this->nivel = other.nivel;
@@ -43,6 +41,12 @@ bool Jogador::operator!=(const Jogador &other) const{
     return ! ( *this == other );
 }
 
+void Jogador::operator!(){
+    this->nivel = 0;
+    this->honra = 0;
+    this->elo = "Sem Elo";
+}
+
 Jogador::Jogador( const string &apelido, int partidasJogadas, int honra, const string &elo ){
     setApelido(apelido);
     setNivel(partidasJogadas);
@@ -61,10 +65,12 @@ Jogador::Jogador( const Jogador &other ){
     this->elo = other.elo;
 }
 
-Jogador::~Jogador( ){}
+Jogador::~Jogador(){
+    
+}
 
 void Jogador::setApelido( const string &apelido ){
-    if( apelido.length() < 5 ){;
+    if( apelido.length() < 2 ){;
         this->apelido = "Novo Invocador";
         return;
     }

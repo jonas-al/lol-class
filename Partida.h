@@ -14,18 +14,18 @@ using std::vector;
 #include "Jogador.cpp"
 #include "Campeao.cpp"
 
+struct AMAG{
+    int abates;
+    int mortes;
+    int assistencias;
+    int gold;
+};
+
 class Partida{
 
     friend ostream & operator<<( ostream &, const Partida & );
 
     public:
-        struct AMAG{
-            int abates;
-            int mortes;
-            int assistencias;
-            int gold;
-        };
-
         Partida( int, AMAG, AMAG, const string &);
         Partida( );
         Partida( const Partida &);
@@ -34,6 +34,7 @@ class Partida{
         Partida & operator=(const Partida &);
         bool operator==(const Partida &) const;
         bool operator!=(const Partida &) const;
+        void operator!();
 
         void setJogadores( );
         void setCampeaos( );

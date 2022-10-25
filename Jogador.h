@@ -22,6 +22,7 @@ class Jogador{
         Jogador & operator=(const Jogador &);
         bool operator==(const Jogador &) const;
         bool operator!=(const Jogador &) const;
+        void operator!();
 
         void setApelido( const string & );
         void setPartidasJogadas( int );
