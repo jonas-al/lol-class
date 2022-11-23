@@ -63,10 +63,6 @@ ostream &operator<<( ostream &output, const Partida &partida ){
         for( int j = 0; j < int(partida.campeaos[i]->getNomeHabilidades().size()); j++ ){
             cout << "Habilidade " << j+1 << ": " << partida.campeaos[i]->getNomeHabilidades()[j] << '\n';
         }
-
-        for(int i = 0; i < partida.campeaos[i]->getUltimateSize(); i++){
-            output << "Cargas de Ultimate: " << *(partida.campeaos[i]->getCargasUltimate()) << '\n';
-        }
     }
 
     return output;
@@ -103,21 +99,21 @@ bool Partida::operator==(const Partida &other) const{
     }
 
     if(
-    this->placarAzul.abates != other.placarAzul.abates &&
-    this->placarAzul.mortes != other.placarAzul.mortes &&
-    this->placarAzul.assistencias != other.placarAzul.assistencias &&
-    this->placarAzul.gold != other.placarAzul.gold &&
+    this->placarAzul.abates != other.placarAzul.abates ||
+    this->placarAzul.mortes != other.placarAzul.mortes ||
+    this->placarAzul.assistencias != other.placarAzul.assistencias ||
+    this->placarAzul.gold != other.placarAzul.gold ||
 
-    this->placarVermelho.abates != other.placarVermelho.abates &&
-    this->placarVermelho.mortes != other.placarVermelho.mortes &&
-    this->placarVermelho.assistencias != other.placarVermelho.assistencias &&
-    this->placarVermelho.gold != other.placarVermelho.gold &&
+    this->placarVermelho.abates != other.placarVermelho.abates ||
+    this->placarVermelho.mortes != other.placarVermelho.mortes ||
+    this->placarVermelho.assistencias != other.placarVermelho.assistencias ||
+    this->placarVermelho.gold != other.placarVermelho.gold ||
 
-    this->dataPartida.getDia() != other.dataPartida.getDia() &&
-    this->dataPartida.getMes() != other.dataPartida.getMes() &&
-    this->dataPartida.getAno() != other.dataPartida.getAno() &&
+    this->dataPartida.getDia() != other.dataPartida.getDia() ||
+    this->dataPartida.getMes() != other.dataPartida.getMes() ||
+    this->dataPartida.getAno() != other.dataPartida.getAno() ||
 
-    this->idPartida != other.idPartida && 
+    this->idPartida != other.idPartida || 
     this->duracao != other.duracao) return false;
 
     return true;
@@ -177,7 +173,6 @@ void Partida::setJogadores( ){
     srand(time(0));
     for (int i = 0; i < MAXJOGADORES; i++){
         jogadores.push_back( new Jogador(players[rand() %int(players.size())], rand() %int(50), 2, elos[rand() %int(elos.size())]));
-        //std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
 
 }
@@ -251,10 +246,4 @@ void Partida::addChampion( const string &nomeCampeao ){
 } 
 void Partida::addElo( const string &nomeElo ){
     elos.push_back( nomeElo );
-}
-
-void Partida::addCargaUltimate ( int quantidade ){
-    for(Campeao *campeao : campeaos){
-        campeao->mudarCargasUltimate(quantidade);
-    }
 }

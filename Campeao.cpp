@@ -11,16 +11,19 @@ using std::vector;
 #include "Campeao.h"
 
 ostream &operator<<( ostream &output, const Campeao &campeao ){
-    output << campeao.nomeCampeao << '\n' << campeao.funcao << '\n' << campeao.habilitado;
+    output << "Nome Campeão: " << campeao.nomeCampeao << '\n' 
+    << "Função: " << campeao.funcao << '\n' 
+    << (campeao.habilitado? ("Status: Habilitado\n") : ("Status: Desabilitado\n")) ;
+
+    output << "Habilidades: ";
     for(int i = 0; i < int(campeao.nomeHabilidades.size()); i++){
-        output << '\n' << campeao.nomeHabilidades[i];
+        if(i == int(campeao.nomeHabilidades.size())-1)
+            output << campeao.nomeHabilidades[i];
+        else
+            output << campeao.nomeHabilidades[i] << " || ";
     }
 
-    for(int i = 0; i < campeao.ultimateSize; i++){
-        output << "Cargas de Ultimate: " << campeao.ultimatePtr[i];
-    }
-
-    return output;
+    return output; 
 }
 
 Campeao& Campeao::operator=(const Campeao &other){
@@ -28,20 +31,14 @@ Campeao& Campeao::operator=(const Campeao &other){
         this->nomeCampeao = other.nomeCampeao;
         this->funcao = other.funcao;
         this->nomeHabilidades = other.nomeHabilidades;
-        this->ultimatePtr = other.ultimatePtr;
-        this->ultimateSize = other.ultimateSize;
-        this->nextEntrieUltimate = other.nextEntrieUltimate;
         this->habilitado = other.habilitado;
     }
     return *this;
 }
 
 bool Campeao::operator==(const Campeao &other) const{
-    if( this->nomeCampeao != other.nomeCampeao && 
-    this->funcao != other.funcao && 
-    this->ultimatePtr != other.ultimatePtr &&
-    this->ultimateSize != other.ultimateSize &&
-    this->nextEntrieUltimate != other.nextEntrieUltimate &&
+    if( this->nomeCampeao != other.nomeCampeao || 
+    this->funcao != other.funcao || 
     this->habilitado != other.habilitado) return false;
 
     return true;
@@ -59,19 +56,12 @@ Campeao::Campeao(const string &nome, const string &funcao, vector<string> nomeHa
     setNomeCampeao(nome);
     setFuncao(funcao);
     this->nomeHabilidades = nomeHabilidades;
-    this-> ultimatePtr = 0;
-    this->ultimateSize = 0;
-    this->nextEntrieUltimate = 0;
     this->habilitado = true;
-    allocUltimate( 5 );
 }
 
 Campeao::Campeao( ):
 nomeCampeao("Novo Campeão"), 
 funcao("Sem função"){
-    this-> ultimatePtr = 0;
-    this->ultimateSize = 0;
-    this->nextEntrieUltimate = 0;
     this->habilitado = true;
 }
 
@@ -79,14 +69,11 @@ Campeao::Campeao(const Campeao &other){
     this->nomeCampeao = other.nomeCampeao;
     this->funcao = other.funcao;
     this->nomeHabilidades = other.nomeHabilidades;
-    this->ultimatePtr = other.ultimatePtr;
-    this->ultimateSize = other.ultimateSize;
-    this->nextEntrieUltimate = other.nextEntrieUltimate;
     this->habilitado = other.habilitado;
 }
 
 Campeao::~Campeao( ){
-    delete [] ultimatePtr;
+    
 }
 
 void Campeao::setNomeCampeao(const string &nomeCampeao){
@@ -103,6 +90,14 @@ void Campeao::setFuncao(const string &funcao){
         return;
     }
     this->funcao = "Sem função";
+}
+
+void Campeao::setNomeHabilidades(vector<string> nomeHabilidades){
+    this->nomeHabilidades = nomeHabilidades;
+}
+
+void Campeao::setHabilitado(bool habilitado){
+    this->habilitado = habilitado;
 }
 
 void Campeao::printHabilidades() const{
@@ -122,50 +117,6 @@ vector<string> Campeao::getNomeHabilidades() const{
     return nomeHabilidades;
 }
 
-void Campeao::allocUltimate( int cargasUltimate ){
-    int *ultimateTemp;
-
-    if ( nextEntrieUltimate < ultimateSize )
-    {
-        ultimatePtr[ nextEntrieUltimate++ ] = cargasUltimate;
-        return;
-    }
-
-    if( ultimateSize == 0 )
-    {
-        ultimateSize = 1;
-        ultimatePtr = new int[ ultimateSize ];
-        ultimatePtr[ nextEntrieUltimate++ ] = cargasUltimate;
-        return;
-    }
-
-    if(ultimateSize <= nextEntrieUltimate){
-        ultimateTemp = new int[ ultimateSize ];
-
-        for(int i = 0; i < ultimateSize; i++)
-            ultimateTemp[ i ] = ultimatePtr[ i ];
-        
-        delete [] ultimatePtr;
-        ultimateSize += int(ceil(ultimateSize * 0.5));
-        ultimatePtr = new int[ ultimateSize ];
-
-        for(int i = 0; i < ultimateSize; i++)
-            ultimateTemp[ i ] = ultimatePtr[ i ];
-
-        ultimatePtr[ nextEntrieUltimate++ ] = cargasUltimate;
-        delete [] ultimateTemp;
-        return;
-    }
-}
-
-int * Campeao::getCargasUltimate( ) const{
-   return ultimatePtr;
-}
-
-int Campeao::getUltimateSize( ) const{
-    return ultimateSize;
-}
-
-void Campeao::mudarCargasUltimate( int quantidade ){
-    allocUltimate( quantidade );
+bool Campeao::getHabilitado() const{
+    return habilitado;
 }

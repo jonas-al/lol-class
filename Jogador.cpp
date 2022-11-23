@@ -28,10 +28,10 @@ Jogador& Jogador::operator=(const Jogador &other){
 
 bool Jogador::operator==(const Jogador &other) const{
     if( 
-    this->apelido != other.apelido && 
-    this->partidasJogadas != other.partidasJogadas &&
-    this->nivel != other.nivel &&
-    this->honra != other.honra &&
+    this->apelido != other.apelido || 
+    this->partidasJogadas != other.partidasJogadas ||
+    this->nivel != other.nivel ||
+    this->honra != other.honra ||
     this->elo != other.elo) return false;
 
     return true;

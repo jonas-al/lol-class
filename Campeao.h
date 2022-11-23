@@ -19,35 +19,28 @@ class Campeao{
         Campeao( );
         Campeao(const Campeao &);
         ~Campeao( );
-
+        
         Campeao & operator=(const Campeao &);
         bool operator==(const Campeao &) const;
         bool operator!=(const Campeao &) const;
         void operator!();
 
-        void getUltimates( ) const;
         void setNomeCampeao( const string & );
         void setFuncao( const string & );
+        void setNomeHabilidades(vector<string>);
+        void setHabilitado(bool);
         void printHabilidades() const;
-        void mudarCargasUltimate( int );
 
         string getNomeCampeao() const;
         string getFuncao() const;
         vector<string> getNomeHabilidades() const;
-        int * getCargasUltimate( ) const;
-        int getUltimateSize( ) const;
+        bool getHabilitado() const;
 
     private:
         string nomeCampeao;
         string funcao;
         vector<string> nomeHabilidades;
         bool habilitado;
-
-        int *ultimatePtr;
-        int ultimateSize;
-        int nextEntrieUltimate;
-
-        void allocUltimate( int );
 };
 
 
