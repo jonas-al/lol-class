@@ -43,10 +43,7 @@ ostream &operator<<( ostream &output, const Ranged &campeao ){
 
 Ranged & Ranged::operator=(const Ranged &other){
     if(this != &other){
-        this->setNomeCampeao(static_cast< Campeao>(other).getNomeCampeao());
-        this->setFuncao(static_cast< Campeao>(other).getFuncao());
-        this->setNomeHabilidades(static_cast< Campeao>(other).getNomeHabilidades());
-        this->setHabilitado(static_cast< Campeao>(other).getHabilitado());
+        *static_cast< Campeao * >( this ) = static_cast< Campeao >( other );
         this->alcanceInicial = other.alcanceInicial;
         this->alcanceNivel = other.alcanceNivel;
         this->resistencias = other.resistencias;

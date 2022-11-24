@@ -5,7 +5,7 @@ using std::cout;
 #include "Melee.cpp"
 
 int main(){
-    Melee sett;
+    Melee sett(70, 1.2, 70, 2.3, false, "Físico", "Sett", "Lutador", {"Quebra-Crânio", "Hora do Show"});
     cout << sett;
 
     return 0;

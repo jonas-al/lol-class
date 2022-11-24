@@ -13,6 +13,7 @@ class Mage : public Ranged{
         Mage( const string &, int, float, int, const string &, const string &, const string &, vector<string> );
         Mage();
         Mage( const Mage & );
+        
         Mage & operator=(const Mage &);
         bool operator==(const Mage &) const;
         bool operator!=(const Mage &) const;

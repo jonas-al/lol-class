@@ -10,7 +10,7 @@ class Melee : public Campeao{
     friend ostream & operator<<( ostream &, const Melee & );
 
     public:
-        Melee( int, int, int, int, bool, string, string, string, vector<string>);
+        Melee( int, float, int, float, bool, string, string, string, vector<string>);
         Melee();
         Melee( const Melee &);
 
@@ -21,9 +21,9 @@ class Melee : public Campeao{
 
     private:
         int armaduraInicial;
-        int armaduraNivel;
+        float armaduraNivel;
         int mrInicial;
-        int mrNivel;
+        float mrNivel;
         bool mana;
 };
 

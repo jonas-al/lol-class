@@ -2,9 +2,9 @@
 #include "Melee.h"
 
 Melee::Melee(int armaduraInicial, 
-    int armaduraNivel, 
+    float armaduraNivel, 
     int mrInicial, 
-    int mrNivel, 
+    float mrNivel, 
     bool mana,
     string tipoDano,
     string nome,
@@ -48,9 +48,7 @@ ostream & operator<<( ostream &output, const Melee &campeao ){
 
 Melee & Melee::operator=(const Melee &other){
     if(this != &other){
-        this->setNomeCampeao(static_cast< Campeao>(other).getNomeCampeao());
-        this->setFuncao(static_cast< Campeao>(other).getFuncao());
-        this->setNomeHabilidades(static_cast< Campeao>(other).getNomeHabilidades());
+        *static_cast< Campeao *> ( this ) = static_cast< Campeao > ( other );
         this->armaduraInicial = other.armaduraInicial;
         this->armaduraNivel = other.armaduraNivel;
         this->mrInicial = other.mrInicial;
