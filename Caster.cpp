@@ -103,8 +103,9 @@ int Caster::usarUltimate(){
     this->setPoderHabilidade(this->getPoderHabilidade()+(this->getPoderHabilidade()*0.2));
     this->setDanoBonus(this->getDanoBonus()+(getDanoBonus()*0.1));
 
-    danoCausado = (10 + (this->getPoderHabilidade()*0.7))*this->getDanoBonus();
-    this->setVida(danoCausado*this->getVampMagico());
+    danoCausado = (10 + (this->getPoderHabilidade()*0.7));
+    danoCausado += danoCausado*this->getDanoBonus();
+    this->setVida(this->getVida() + danoCausado*this->getVampMagico());
     
     return danoCausado;
 }

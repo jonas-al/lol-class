@@ -126,11 +126,11 @@ void Campeao::batalha( vector < Campeao * > campeoes ){
         classe.erase(classe.begin());
         classes.push_back(classe);
     }
-    cout << "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-" << '\n';
+    cout << "\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-" << '\n';
     cout << "Batalha entre um campeão da classe " << classes[0] << " e um campeão da classe " << classes[1] << "!!!\n";
     while(campeoes[0]->getVida() > 0 && campeoes[1]->getVida() > 0 ){
         if(campeoes[0]->getHabilitado()){
-            cout << "É a vez do(a) " << campeoes[0]->getNomeCampeao()<< '\n';
+            cout << "\nÉ a vez do(a) " << campeoes[0]->getNomeCampeao()<< '\n';
             cout <<"Vida atual: " << campeoes[0]->getNomeCampeao() << ": " << campeoes[0]->getVida() << '\n';
             cout <<"Vida atual: " << campeoes[1]->getNomeCampeao() << ": " << campeoes[1]->getVida() << '\n';
             cout << "Selecione uma ação!!!" << '\n';

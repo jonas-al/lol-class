@@ -29,6 +29,11 @@ int main(){
     campeoes.push_back(teste1);
     campeoes.push_back(teste2);
 
+    cout << '\n';
+    campeoes[0]->printCampeao();
+    cout << '\n';
+    campeoes[1]->printCampeao();
+
     Campeao::batalha( campeoes );
     return 0;
 }

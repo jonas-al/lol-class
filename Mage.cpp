@@ -72,7 +72,6 @@ void Mage::operator!(){
 }
 
 int Mage::usarUltimate(){
-    cout << "usarUltimate... - Mage" << '\n';
     this->setAlcanceInicial(this->getAlcanceInicial()+(this->getAlcanceInicial()*this->getAlcanceNivel()));
     return 0;
 }
