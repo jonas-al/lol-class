@@ -4,71 +4,88 @@
 Mage::Mage
 (
     const string &tipoMagia,
+    float penetracaoMagica,
     int alcanceInicial, 
     float alcanceNivel, 
     int resistencias, 
     const string &tipoDano,
+    int manaInicial,
+    int manaNivel,
+    int manaRegen,
     const string &nome,
-    const string &funcao,
-    vector<string> nomeHabilidades
-) : Ranged( 
+    int vidaIncial,
+    int escudoInicial,
+    vector<string> nomeHabilidades,
+    bool habilitado
+):
+tipoMagia(tipoMagia),
+penetracaoMagica(penetracaoMagica),
+Ranged( 
     alcanceInicial, 
     alcanceNivel, 
     resistencias, 
-    tipoDano, 
-    nome, 
-    funcao, 
-    nomeHabilidades )
-{
-    this->tipoMagia = tipoMagia;
-}   
+    tipoDano,
+    manaInicial,
+    manaNivel,
+    manaRegen,
+    nome,
+    vidaIncial,
+    escudoInicial,
+    nomeHabilidades,
+    habilitado
+){}
 
-Mage::Mage():tipoMagia("Nenhuma"){}
+Mage::Mage():tipoMagia("teste"),
+penetracaoMagica(.1){}
 
-Mage::Mage(const Mage &other):Ranged(static_cast < Ranged >(other)){
+Mage::Mage( const Mage &other ):Ranged(other){
     this->tipoMagia = other.tipoMagia;
+    this->penetracaoMagica = other.penetracaoMagica;
 }
 
 ostream & operator<<( ostream &output, const Mage &campeao ){
-    output << static_cast< Ranged >(campeao) << 
-    "Tipo Mágia: " << campeao.tipoMagia << '\n';
-
+    campeao.printCampeao( );
+    output << "Tipo Mágia: " << campeao.tipoMagia;
     return output;
 }
 
 Mage & Mage::operator=(const Mage &other){
     if(this != &other){
-        this->setNomeCampeao(static_cast< Campeao >(other).getNomeCampeao());
-        this->setFuncao(static_cast< Campeao >(other).getFuncao());
-        this->setNomeHabilidades(static_cast< Campeao >(other).getNomeHabilidades());
-        this->setHabilitado(static_cast< Campeao >(other).getHabilitado());
-
-        this->setAlcanceInicial(static_cast< Ranged >(other).getAlcanceInicial());
-        this->setAlcanceNivel(static_cast< Ranged >(other).getAlcanceNivel());
-        this->setResistencias(static_cast< Ranged >(other).getResistencias());
-        this->setTipoDano(static_cast< Ranged >(other).getTipoDano());
-        
         this->tipoMagia = other.tipoMagia;
+        this->penetracaoMagica = other.penetracaoMagica;
     }
     return *this;
 }
 
 bool Mage::operator==(const Mage &other) const{
-    if(static_cast< Campeao >(*this) != static_cast< Campeao >(other) ||
-    static_cast< Ranged >(*this) != static_cast< Ranged >(other) ||
-    this->tipoMagia != other.tipoMagia) return false;
-
+    if(this->tipoMagia != other.tipoMagia || this->penetracaoMagica != other.penetracaoMagica) return false;
     return true;
 }
 
 bool Mage::operator!=(const Mage &other) const{
-    if(static_cast< Campeao >(*this) == static_cast< Campeao >(other) && 
-    static_cast< Ranged >(*this) == static_cast< Ranged >(other) &&
-    *this == other) return false;
-
+    if(*this == other) return false;
     return true;
 }
 
 void Mage::operator!(){
     this->setHabilitado(!this->getHabilitado());
+}
+
+int Mage::usarUltimate(){
+    cout << "usarUltimate... - Mage" << '\n';
+    this->setAlcanceInicial(this->getAlcanceInicial()+(this->getAlcanceInicial()*this->getAlcanceNivel()));
+    return 0;
+}
+
+void Mage::sofrerDano( int danoSofrido ){
+    cout << "Dano sofrido: " << danoSofrido << '\n';
+    this->setVida(this->getVida() - danoSofrido);
+}
+
+void Mage::afastar(){
+    this->setAlcanceInicial(25);
+}
+
+void Mage::printCampeao() const{
+    Ranged::printCampeao();
 }

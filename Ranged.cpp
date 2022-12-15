@@ -7,100 +7,79 @@ Ranged::Ranged
     float alcanceNivel, 
     int resistencias, 
     const string &tipoDano,
+    int manaInicial,
+    int manaNivel,
+    int manaRegen,
     const string &nome,
-    const string &funcao,
-    vector<string> nomeHabilidades
-) : Campeao(nome, funcao, nomeHabilidades)
-{
-    this->alcanceInicial = alcanceInicial;
-    this->alcanceNivel = alcanceNivel;
-    this->resistencias = resistencias;
-    this->tipoDano = tipoDano;
+    int vidaIncial,
+    int escudoInicial,
+    vector<string> nomeHabilidades,
+    bool habilitado
+):alcanceInicial(alcanceInicial),
+alcanceNivel(alcanceNivel),
+resistencias(resistencias),
+tipoDano(tipoDano),
+manaInicial(manaInicial),
+manaNivel(manaNivel),
+manaRegen(manaRegen),
+Campeao(nome, vidaIncial, escudoInicial, nomeHabilidades, habilitado){}
+
+Ranged::Ranged(){
+    if(campeaoSelecionado == 1 ){
+        SupportStruct campeao = getChampSupport();
+        this->alcanceInicial = campeao.alcanceInicial;
+        this->alcanceNivel = campeao.alcanceNivel;
+        this->resistencias = campeao.resistencias;
+        this->tipoDano = campeao.tipoDano;
+        this->manaInicial = campeao.manaInicial;
+        this->manaNivel = campeao.manaNivel;
+        this->manaRegen = campeao.manaRegen;
+    }
+    if( campeaoSelecionado == 2 ){
+        CasterStruct campeao = getChampCaster();
+        this->alcanceInicial = campeao.alcanceInicial;
+        this->alcanceNivel = campeao.alcanceNivel;
+        this->resistencias = campeao.resistencias;
+        this->tipoDano = campeao.tipoDano;
+        this->manaInicial = campeao.manaInicial;
+        this->manaNivel = campeao.manaNivel;
+        this->manaRegen = campeao.manaRegen;
+    }
+    else{
+        ShooterStruct campeao = getChampShooter();
+        this->alcanceInicial = campeao.alcanceInicial;
+        this->alcanceNivel = campeao.alcanceNivel;
+        this->resistencias = campeao.resistencias;
+        this->tipoDano = campeao.tipoDano;
+        this->manaInicial = campeao.manaInicial;
+        this->manaNivel = campeao.manaNivel;
+        this->manaRegen = campeao.manaRegen;
+    }
 }
 
-Ranged::Ranged():
-alcanceInicial(0), 
-alcanceNivel(0),
-resistencias(0),
-tipoDano("Null"){}
-
-Ranged::Ranged(const Ranged &other):Campeao( static_cast< Campeao >(other) ){
+Ranged::Ranged( const Ranged &other ):Campeao(other){
     this->alcanceInicial = other.alcanceInicial;
     this->alcanceNivel = other.alcanceNivel;
     this->resistencias = other.resistencias;
     this->tipoDano = other.tipoDano;
+    this->manaInicial = other.manaInicial;
+    this->manaNivel = other.manaNivel;
+    this->manaRegen = other.manaRegen;
 }
 
-ostream &operator<<( ostream &output, const Ranged &campeao ){
-    output << static_cast< Campeao>(campeao) << '\n' <<
-    "Alcance Incial: " << campeao.alcanceInicial << '\n' <<
-    "Alcance Nivel: " << campeao.alcanceNivel << '\n' <<
-    "Resistências: " << campeao.resistencias << '\n' <<
-    "Tipo Dano: " << campeao.tipoDano << '\n';
+Ranged::~Ranged(){}
 
-    return output;
+void Ranged::setAlcanceInicial( int alcance){
+    this->alcanceInicial += alcance;
 }
 
-Ranged & Ranged::operator=(const Ranged &other){
-    if(this != &other){
-        *static_cast< Campeao * >( this ) = static_cast< Campeao >( other );
-        this->alcanceInicial = other.alcanceInicial;
-        this->alcanceNivel = other.alcanceNivel;
-        this->resistencias = other.resistencias;
-        this->tipoDano = other.tipoDano;
-    }
-    return *this;
-}
-
-bool Ranged::operator==(const Ranged &other) const{
-    if(static_cast< Campeao >(*this) != static_cast< Campeao >(other) ||
-    this->alcanceInicial != other.alcanceInicial || 
-    this->alcanceNivel != other.alcanceNivel || 
-    this->resistencias != other.resistencias || 
-    this->tipoDano != other.tipoDano) return false;
-
-    return true;
-}
-
-bool Ranged::operator!=(const Ranged &other) const{
-    if(static_cast< Campeao >(*this) == static_cast< Campeao >(other) && 
-    *this  == other) return false;
-
-    return true;
-}
-
-void Ranged::operator!(){
-    this->setHabilitado(!this->getHabilitado());
-}
-
-int Ranged::getAlcanceInicial() const{
-    return alcanceInicial;
-}
-
-float Ranged::getAlcanceNivel() const{
-    return alcanceNivel;
-}
-
-int Ranged::getResistencias() const{
-    return resistencias;
-}
-
-string Ranged::getTipoDano() const{
-    return tipoDano;
-}
-
-void Ranged::setAlcanceInicial( int alcanceInicial ){
-    this->alcanceInicial = alcanceInicial;
-}
-
-void Ranged::setAlcanceNivel( float alcanceNivel){
-    this->alcanceNivel = alcanceNivel;
-}
-
-void Ranged::setResistencias( int resistencias ){
-    this->resistencias = resistencias;
-}
-
-void Ranged::setTipoDano( string tipoDano ){
-    this->tipoDano = tipoDano;
+void Ranged::printCampeao() const{
+    Campeao::printCampeao();
+    cout << "Alcance Inicial: " << this->alcanceInicial << '\n';
+    cout << "Alcance Nível: " << this->alcanceNivel*100 <<'%'<<'\n';
+    cout << "Resistências: " << this->resistencias << '\n';
+    cout << "Tipo dano: " << this->tipoDano << '\n';
+    cout << "Mana Incial: " << this->manaInicial << '\n';
+    cout << "Mana Nível: " << this->manaNivel << '\n';
+    cout << "Regeneração de Mana: " << this->manaRegen << '\n';
 }

@@ -1,46 +1,149 @@
 #ifndef CAMPEAO_H
 #define CAMPEAO_H
 
-#include <iostream>
-using std::ostream;
+#include "Partida.h"
 
-#include <string>
-using std::string;
+struct SupportStruct {
+    int cura = 20;
+    int escudo = 20;
+    float resistenciaEscudo = .10;
+    float bonusCuraEscudo = .10;
+    string tipoMagia = "Fantasia";
+    float penetracaoMagica = .20;
+    int alcanceInicial = 300;
+    float alcanceNivel = .10;
+    int resistencias = 20; 
+    string tipoDano = "Mágico";
+    int manaInicial = 400;
+    int manaNivel = .1;
+    int manaRegen = 2;
+    string nome = "Lulu";
+    int vidaIncial = 400;
+    int escudoInicial = 0;
+    vector<string> nomeHabilidades = {"LANÇA-PURPURINA", "CRESCIMENTO VIRENTE"};
+    bool habilitado = true;
+};
 
-#include <vector>
-using std::vector;
+struct CasterStruct{
+    int poderHabilidade = 300;
+    float danoBonus = .10;
+    float vampMagico = .20;
+    string tipoMagia = "Luz";
+    float penetracaoMagica = .15;
+    int alcanceInicial = 300;
+    float alcanceNivel = .10;
+    int resistencias = 20;
+    string tipoDano = "Mágico";
+    int manaInicial = 400;
+    int manaNivel = .1;
+    int manaRegen = 2;
+    string nome = "Lux";
+    int vidaIncial = 450;
+    int escudoInicial = 150;
+    vector<string> nomeHabilidades = {"PRISÃO PLÁSMATICA", "CENTELHA FINAL"};
+    bool habilitado = true;
+};
 
-class Campeao{
-    
-    friend ostream & operator<<( ostream &, const Campeao & );
+struct RageUserStruct{
+    int furiaInicial = 200;
+    float furiaRegen = .10;
+    float chanceDesvio = .1;
+    float bonusDanoVida = .5;
+    int armaduraInicial = 40;
+    float armaduraNivel = .5;
+    int mrInicial = 45;
+    float mrNivel = .5;
+    bool furtivo = false;
+    string nome = "Shyvanna";
+    int vidaIncial = 600;
+    int escudoInicial = 0;
+    vector<string> nomeHabilidades = {"MORDIDA DUPLA", "DESCIDA DO DRAGÃO"};
+    bool habilitado = true;
+};
+
+struct ShooterStruct{
+    string tipoArma = "Metralhadora";
+    int danoAtaque = 300;
+    float chanceCritico = .35;
+    int alcanceInicial = 450;
+    float alcanceNivel = .7;
+    int resistencias = 30;
+    string tipoDano = "Físico";
+    int manaInicial = 300;
+    int manaNivel = 7;
+    int manaRegen = 2;
+    string nome = "Jinx";
+    int vidaIncial = 400;
+    int escudoInicial = 100;
+    vector<string> nomeHabilidades = {"ZAP!", "SUPER MEGA MÍSSIL DA MORTE!"};
+    bool habilitado = true;
+};
+
+struct TankStruct{
+    float reducaoDano = .10;
+    float bonusVida = .1;
+    int armaduraInicial = 45;
+    float armaduraNivel = .7;
+    int mrInicial = 45;
+    float mrNivel = .7;
+    bool furtivo = false;
+    string nome = "Maokai";
+    int vidaIncial = 800;
+    int escudoInicial = 0;
+    vector<string> nomeHabilidades = {"ESMAGAMENTO ESPINHOSO", "GARRAS DA NATUREZA"};
+    bool habilitado = true;
+};
+
+class Campeao : public Partida{
 
     public:
-        Campeao( const string &, const string &, vector<string>);
+        Campeao( const string &, int, int, vector<string>, bool);
         Campeao( );
-        Campeao(const Campeao &);
-        ~Campeao( );
+        Campeao( const Campeao & );
+        virtual ~Campeao( );
         
-        Campeao & operator=(const Campeao &);
-        bool operator==(const Campeao &) const;
-        bool operator!=(const Campeao &) const;
-        void operator!();
+        //métodos virtuais puros
+        virtual int usarUltimate() = 0;
+        virtual int usarHabilidade() = 0;
+        virtual void sofrerDano( int ) = 0;
+        virtual int realizarAcao( int, Campeao & ) = 0;
 
-        void setNomeCampeao( const string & );
-        void setFuncao( const string & );
-        void setNomeHabilidades(vector<string>);
-        void setHabilitado(bool);
+        //métodos get, set e print
+        virtual void printCampeao() const;
         void printHabilidades() const;
+        int getVida() {return this->vidaIncial;}
+        int getEscudo() {return this->escudoInicial;}
+        string getNomeCampeao() {return this->nomeCampeao;}
+        vector<string> getNomeHabilidades() {return this->nomeHabilidades;}
+        bool getHabilitado() {return this->habilitado;}
+        virtual void setVida( int );
+        virtual void setEscudo( int );
+        virtual void setHabilitado( bool );
+        SupportStruct getChampSupport(){return champSupport;}
+        CasterStruct getChampCaster(){return champCaster;}
+        ShooterStruct getChampShooter(){return champShooter;}
+        RageUserStruct getChampRageUser(){return champRageUser;}
+        TankStruct getChampTank(){return champTank;}
+        
 
-        string getNomeCampeao() const;
-        string getFuncao() const;
-        vector<string> getNomeHabilidades() const;
-        bool getHabilitado() const;
+        //método de batalha entre campeões.
+        static void batalha( vector < Campeao * > campeoes );
+        int selecionarCampeao( );
+        int campeaoSelecionado = 0;
+        
 
     private:
         string nomeCampeao;
-        string funcao;
+        int vidaIncial;
+        int escudoInicial;
         vector<string> nomeHabilidades;
         bool habilitado;
+        
+        SupportStruct champSupport;
+        CasterStruct champCaster;
+        ShooterStruct champShooter;
+        RageUserStruct champRageUser;
+        TankStruct champTank;
 };
 
 

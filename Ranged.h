@@ -1,39 +1,35 @@
 #ifndef RANGED_H
 #define RANGED_H
 
-#include <iostream>
-
-#include "Campeao.cpp"
+#include "Campeao.h"
 
 class Ranged : public Campeao{
 
-    friend ostream &operator<<( ostream &, const Ranged & );
-
     public:
-        Ranged( int, float, int, const string &, const string &, const string &, vector<string> );
-        Ranged();
-        Ranged(const Ranged &);
+        Ranged( int, float, int, const string &, int, int, int, const string &, int, int, vector<string>, bool);
+        Ranged( );
+        Ranged( const Ranged & );
+        virtual ~Ranged( );
+        
+        //método virtual puro
+        virtual void afastar() = 0;
 
-        Ranged & operator=(const Ranged &);
-        bool operator==(const Ranged &) const;
-        bool operator!=(const Ranged &) const;
-        void operator!();
-
-        int getAlcanceInicial() const;
-        float getAlcanceNivel() const;
-        int getResistencias() const;
-        string getTipoDano() const;
-
+        //métodos get, set e print
+        int getAlcanceInicial() {return this->alcanceInicial;}
+        float getAlcanceNivel(){return this->alcanceNivel;}
+        int getResistencias(){return this->resistencias;}
+        string getTipoDano(){return this->tipoDano;}
         void setAlcanceInicial( int );
-        void setAlcanceNivel( float );
-        void setResistencias( int );
-        void setTipoDano( string );
+        virtual void printCampeao() const;
 
     private:
         int alcanceInicial;
         float alcanceNivel;
         int resistencias;
         string tipoDano;
+        int manaInicial;
+        int manaNivel;
+        int manaRegen;
 };
 
 #endif

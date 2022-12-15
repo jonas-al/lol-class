@@ -1,81 +1,54 @@
-#include <iostream>
 #include "Melee.h"
 
-Melee::Melee(int armaduraInicial, 
+Melee::Melee(
+    int armaduraInicial, 
     float armaduraNivel, 
     int mrInicial, 
-    float mrNivel, 
-    bool mana,
-    string tipoDano,
-    string nome,
-    string funcao,
-    vector<string> nomeHabilidades
-) : Campeao(nome, funcao, nomeHabilidades)
-{
-    this->armaduraInicial = armaduraInicial;
-    this->armaduraNivel = armaduraNivel;
-    this->mrInicial = mrInicial;
-    this->mrNivel = mrNivel;
-    this->mana = mana;
-}
+    float mrNivel,
+    bool furtivo,
+    const string &nome,
+    int vidaIncial,
+    int escudoInicial,
+    vector<string> nomeHabilidades,
+    bool habilitado
+):
+armaduraInicial(armaduraInicial),
+armaduraNivel(armaduraNivel),
+mrInicial(mrInicial),
+mrNivel(mrNivel),
+furtivo(furtivo),
+Campeao(nome, vidaIncial, escudoInicial, nomeHabilidades, habilitado){}
 
 Melee::Melee():
-armaduraInicial(0),
-armaduraNivel(0),
-mrInicial(0),
-mrNivel(0),
-mana(false),
-Campeao(){}
+armaduraInicial(1),
+armaduraNivel(.1),
+mrInicial(1),
+mrNivel(.1),
+furtivo(false){};
 
-Melee::Melee( const Melee &other) : Campeao(static_cast< Campeao >(other)){
+Melee::Melee( const Melee &other ):Campeao(other){
     this->armaduraInicial = other.armaduraInicial;
     this->armaduraNivel = other.armaduraNivel;
     this->mrInicial = other.mrInicial;
-    this->mrNivel = other.mrNivel;
-    this->mana = other.mana;
+    this->furtivo = other.furtivo;
 }
 
-ostream & operator<<( ostream &output, const Melee &campeao ){
-    output << static_cast< Campeao >(campeao) << '\n' <<
-    "Armadura Inicial: " << campeao.armaduraInicial << '\n' <<
-    "Armadura Nivel: " << campeao.armaduraNivel << '\n' <<
-    "Resistência Mágica: " << campeao.mrInicial << '\n' <<
-    "Resistência Mágica Nível: " << campeao.mrNivel << '\n' <<
-    "Utiliza mana?: " << (campeao.mana? ("Sim") : ("Não")) << '\n';
+Melee::~Melee(){}
 
-    return output;
+void Melee::setArmaduraInicial( int armadura ){
+    this->armaduraInicial += armadura;
+}
+void Melee::setMrInicial( int mr ){
+    this->mrInicial += mr;
+}
+void Melee::setFurtivo(){
+    this->furtivo = !this->furtivo;
 }
 
-Melee & Melee::operator=(const Melee &other){
-    if(this != &other){
-        *static_cast< Campeao *> ( this ) = static_cast< Campeao > ( other );
-        this->armaduraInicial = other.armaduraInicial;
-        this->armaduraNivel = other.armaduraNivel;
-        this->mrInicial = other.mrInicial;
-        this->mrNivel = other.mrNivel;
-        this->mana = other.mana;
-    }
-    return *this;
-}
-
-bool Melee::operator==(const Melee &other) const{
-    if(static_cast< Campeao >(*this) != static_cast< Campeao >(other) ||
-    this->armaduraInicial != other.armaduraInicial || 
-    this->armaduraNivel != other.armaduraNivel || 
-    this->mrInicial != other.mrInicial || 
-    this->mrNivel != other.mrNivel || 
-    this->mana != other.mana) return false;
-
-    return true;
-}
-
-bool Melee::operator!=(const Melee &other) const{
-    if(static_cast< Campeao >(*this) == static_cast< Campeao >(other) ||
-    *this == other) return false;
-
-    return true;
-}
-
-void Melee::operator!(){
-    this->setHabilitado(!this);
+void Melee::printCampeao() const{
+    Campeao::printCampeao();
+    cout << "Armadura Inicial: " << this->armaduraInicial << '\n';
+    cout << "Armadura Nível: " << this->armaduraNivel << '\n';
+    cout << "Resistência Mágica Inicial: " << this->mrInicial << '\n';
+    cout << "Resistência Mágica Nível: " << this->mrNivel << '\n';
 }

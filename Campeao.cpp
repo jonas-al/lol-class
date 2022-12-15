@@ -1,122 +1,172 @@
-#include <iostream>
-using std::cout;
-using std::ostream;
-#include <string>
-using std::string;
-#include <vector>
-using std::vector;
-#include <math.h>
-
-
 #include "Campeao.h"
+#include "Caster.h"
+#include "Shooter.h"
 
-ostream &operator<<( ostream &output, const Campeao &campeao ){
-    output << "Nome Campeão: " << campeao.nomeCampeao << '\n' 
-    << "Função: " << campeao.funcao << '\n' 
-    << (campeao.habilitado? ("Status: Habilitado\n") : ("Status: Desabilitado\n")) ;
+Campeao::Campeao(const string &nome, int vida, int escudo,vector<string> nomeHabilidades, bool habilitado):nomeCampeao(nome), vidaIncial(vida), escudoInicial(escudo),nomeHabilidades(nomeHabilidades), habilitado(habilitado){}
 
-    output << "Habilidades: ";
-    for(int i = 0; i < int(campeao.nomeHabilidades.size()); i++){
-        if(i == int(campeao.nomeHabilidades.size())-1)
-            output << campeao.nomeHabilidades[i];
-        else
-            output << campeao.nomeHabilidades[i] << " || ";
+Campeao::Campeao(){
+    int escolha = this->selecionarCampeao();
+
+    if(escolha == 1){
+        SupportStruct campeao = Campeao::getChampSupport();
+        this->campeaoSelecionado = 1;
+        this->nomeCampeao = campeao.nome;
+        this->vidaIncial = campeao.vidaIncial;
+        this->escudoInicial = campeao.escudoInicial;
+        this->habilitado = campeao.habilitado;
+        this->nomeHabilidades = campeao.nomeHabilidades;
     }
 
-    return output; 
-}
-
-Campeao& Campeao::operator=(const Campeao &other){
-    if(this != &other){
-        this->nomeCampeao = other.nomeCampeao;
-        this->funcao = other.funcao;
-        this->nomeHabilidades = other.nomeHabilidades;
-        this->habilitado = other.habilitado;
+    if(escolha == 2){
+        CasterStruct campeao = Campeao::getChampCaster();
+        this->campeaoSelecionado = 2;
+        this->nomeCampeao = campeao.nome;
+        this->vidaIncial = campeao.vidaIncial;
+        this->escudoInicial = campeao.escudoInicial;
+        this->habilitado = campeao.habilitado;
+        this->nomeHabilidades = campeao.nomeHabilidades;
     }
-    return *this;
+
+    if(escolha == 3){
+        ShooterStruct campeao = Campeao::getChampShooter();
+        this->campeaoSelecionado = 3;
+        this->nomeCampeao = campeao.nome;
+        this->vidaIncial = campeao.vidaIncial;
+        this->escudoInicial = campeao.escudoInicial;
+        this->habilitado = campeao.habilitado;
+        this->nomeHabilidades = campeao.nomeHabilidades;
+    }
+
+    if(escolha == 4){
+        RageUserStruct campeao = Campeao::getChampRageUser();
+        this->campeaoSelecionado = 4;
+        this->nomeCampeao = campeao.nome;
+        this->vidaIncial = campeao.vidaIncial;
+        this->escudoInicial = campeao.escudoInicial;
+        this->habilitado = campeao.habilitado;
+        this->nomeHabilidades = campeao.nomeHabilidades;
+    }
+
+    if(escolha == 5){
+        TankStruct campeao = Campeao::getChampTank();
+        this->campeaoSelecionado = 5;
+        this->nomeCampeao = campeao.nome;
+        this->vidaIncial = campeao.vidaIncial;
+        this->escudoInicial = campeao.escudoInicial;
+        this->habilitado = campeao.habilitado;
+        this->nomeHabilidades = campeao.nomeHabilidades;
+    }
 }
 
-bool Campeao::operator==(const Campeao &other) const{
-    if( this->nomeCampeao != other.nomeCampeao || 
-    this->funcao != other.funcao || 
-    this->habilitado != other.habilitado) return false;
-
-    return true;
-}
-
-bool Campeao::operator!=(const Campeao &other) const{
-    return ! ( *this == other );
-}
-
-void Campeao::operator!(){
-    this->habilitado = !habilitado;
-}
-
-Campeao::Campeao(const string &nome, const string &funcao, vector<string> nomeHabilidades){
-    setNomeCampeao(nome);
-    setFuncao(funcao);
-    this->nomeHabilidades = nomeHabilidades;
-    this->habilitado = true;
-}
-
-Campeao::Campeao( ):
-nomeCampeao("Novo Campeão"), 
-funcao("Sem função"){
-    this->habilitado = true;
-}
-
-Campeao::Campeao(const Campeao &other){
+Campeao::Campeao( const Campeao &other ){
     this->nomeCampeao = other.nomeCampeao;
-    this->funcao = other.funcao;
+    this->vidaIncial = other.vidaIncial;
+    this->escudoInicial = other.escudoInicial;
     this->nomeHabilidades = other.nomeHabilidades;
     this->habilitado = other.habilitado;
 }
 
-Campeao::~Campeao( ){
-    
-}
+Campeao::~Campeao( ){}
 
-void Campeao::setNomeCampeao(const string &nomeCampeao){
-    if(nomeCampeao.length() > 2){
-        this->nomeCampeao = nomeCampeao;
-        return;
-    }
-    this->nomeCampeao = "Novo Campeão";
-}
-
-void Campeao::setFuncao(const string &funcao){
-    if(funcao.length() > 2){
-        this->funcao = funcao;
-        return;
-    }
-    this->funcao = "Sem função";
-}
-
-void Campeao::setNomeHabilidades(vector<string> nomeHabilidades){
-    this->nomeHabilidades = nomeHabilidades;
-}
-
-void Campeao::setHabilitado(bool habilitado){
-    this->habilitado = habilitado;
+void Campeao::printCampeao() const{
+    cout << "Nome do Campeão: " << this->nomeCampeao << '\n';
+    cout << "Vida Inicial: " << this->vidaIncial << '\n';
+    cout << "Escudo Inicial: " << this->escudoInicial << '\n';
+    this->printHabilidades();
+    cout << "Habilitado: " << this->vidaIncial << '\n';
 }
 
 void Campeao::printHabilidades() const{
     for(int i = 0; i < int(nomeHabilidades.size()); i++){
-        cout << nomeHabilidades[i];
+        cout <<"Habilidade "<<i+1<<": "<< nomeHabilidades[i] << '\n';
     }
 }
 
-string Campeao::getNomeCampeao() const{
-    return nomeCampeao;
-}
-string Campeao::getFuncao() const{
-    return funcao;
+void Campeao::setVida( int vida ){
+    this->vidaIncial = vida;
 }
 
-vector<string> Campeao::getNomeHabilidades() const{
-    return nomeHabilidades;
+void Campeao::setEscudo( int escudo ){
+    this->escudoInicial += escudo;
 }
 
-bool Campeao::getHabilitado() const{
-    return habilitado;
+void Campeao::setHabilitado( bool estado ){
+    this->habilitado = estado;
+}
+
+void Campeao::sofrerDano( int danoSofrido ){
+    this->setVida( this->getVida() - danoSofrido );
+}
+
+int Campeao::selecionarCampeao(){
+    int escolha;
+    cout << "Escolha uma das seguintes classes: \n";
+    cout << "1 - Support, 2 - Caster, 3 - Shooter, 4 - Rage User, 5 - Tank\n";
+    cout << "Digite sua escolha: ";
+    cin >> escolha;
+
+    return escolha;
+}
+
+void Campeao::batalha( vector < Campeao * > campeoes ){
+    vector<string> classes;
+    string classe, vencedor;
+    int acaoEscolhida;
+    Caster *casterPtr; Shooter *shooterPtr;
+    for (int i = 0; i < int(campeoes.size()); i++){
+        casterPtr = dynamic_cast < Caster * >( campeoes[ i ] );
+        shooterPtr = dynamic_cast < Shooter * >( campeoes[ i ] );
+        if(casterPtr != 0){
+            campeoes[ i ]->setVida(campeoes[ i ]->getVida() + campeoes[ i ]->getEscudo());
+        }
+        if(shooterPtr != 0){
+            campeoes[ i ]->setVida(campeoes[ i ]->getVida() + campeoes[ i ]->getEscudo());
+        }
+        classe = typeid(*campeoes[i]).name();
+        classe.erase(classe.begin());
+        classes.push_back(classe);
+    }
+    cout << "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-" << '\n';
+    cout << "Batalha entre um campeão da classe " << classes[0] << " e um campeão da classe " << classes[1] << "!!!\n";
+    while(campeoes[0]->getVida() > 0 && campeoes[1]->getVida() > 0 ){
+        if(campeoes[0]->getHabilitado()){
+            cout << "É a vez do(a) " << campeoes[0]->getNomeCampeao()<< '\n';
+            cout <<"Vida atual: " << campeoes[0]->getNomeCampeao() << ": " << campeoes[0]->getVida() << '\n';
+            cout <<"Vida atual: " << campeoes[1]->getNomeCampeao() << ": " << campeoes[1]->getVida() << '\n';
+            cout << "Selecione uma ação!!!" << '\n';
+            cout << "1 - Atacar, 2 - Defender, 3 - Efeito: ";
+            cin >> acaoEscolhida; acaoEscolhida -= 1;
+
+            if(acaoEscolhida == 0){
+            campeoes[1]->sofrerDano(campeoes[0]->realizarAcao(acaoEscolhida, *campeoes[1]));
+            }
+            if(acaoEscolhida == 1){
+            campeoes[0]->realizarAcao(acaoEscolhida, *campeoes[1]);
+            }
+            if(acaoEscolhida == 2){
+            campeoes[0]->realizarAcao(acaoEscolhida, *campeoes[1]);
+            }
+        }
+
+        if(campeoes[1]->getVida() > 0 && campeoes[1]->getHabilitado()){
+            cout << "\nÉ a vez do(a) " << campeoes[1]->getNomeCampeao()<< '\n';
+            cout <<"Vida atual: " << campeoes[0]->getNomeCampeao() << ": " << campeoes[0]->getVida() << '\n';
+            cout <<"Vida atual: " << campeoes[1]->getNomeCampeao() << ": " << campeoes[1]->getVida() << '\n';
+            cout << "Selecione uma ação!!!" << '\n';
+            cout << "1 - Atacar, 2 - Defender, 3 - Efeito: ";
+            cin >> acaoEscolhida; acaoEscolhida -= 1;
+
+            if(acaoEscolhida == 0){
+            campeoes[0]->sofrerDano(campeoes[1]->realizarAcao(acaoEscolhida, *campeoes[1]));
+            }
+            if(acaoEscolhida == 1){
+            campeoes[1]->realizarAcao(acaoEscolhida, *campeoes[1]);
+            }
+            if(acaoEscolhida == 2){
+            campeoes[1]->realizarAcao(acaoEscolhida, *campeoes[1]);
+            }
+        }
+    }
+    cout << "O vencedor é: ";
+    campeoes[0]->getVida() > 0? (cout << campeoes[0]->getNomeCampeao()) : (cout << campeoes[1]->getNomeCampeao());
 }
